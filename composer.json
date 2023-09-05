@@ -8,7 +8,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Linkage\\DoctrinePostgreSqlTstzrange\\": "src/"
+            "Linkage\\DoctrinePostgreSqlTsTzRange\\": "src/"
         }
     },
     "authors": [
