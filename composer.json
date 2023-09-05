@@ -17,5 +17,7 @@
             "email": "hiromi-hishida@linkage-inc.co.jp"
         }
     ],
-    "require": {}
+    "require": {
+        "php": "^8.2"
+    }
 }
