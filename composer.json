@@ -11,6 +11,11 @@
             "Linkage\\DoctrinePostgreSqlTsTzRange\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Linkage\\DoctrinePostgreSqlTsTzRange\\Tests\\": "tests/"
+        }
+    },
     "authors": [
         {
             "name": "77web",
