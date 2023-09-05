@@ -1,0 +1,21 @@
+{
+    "name": "linkage/doctrine-postgresql-tstzrange",
+    "description": "Doctrine Type for PostgreSQL's tstzrange",
+    "type": "library",
+    "require-dev": {
+        "phpunit/phpunit": "^10.3"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Linkage\\DoctrinePostgreSqlTstzrange\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "77web",
+            "email": "hiromi-hishida@linkage-inc.co.jp"
+        }
+    ],
+    "require": {}
+}
