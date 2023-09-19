@@ -25,12 +25,11 @@ class TsTzRangeUsageTest extends TestCase
             'driver' => 'pdo_pgsql',
         ];
         $this->conn = DriverManager::getConnection($connectionParams);
-        $this->conn->executeQuery(file_get_contents(__DIR__.'/drop_table.sql'));
-        $this->conn->executeQuery(file_get_contents(__DIR__.'/create_table.sql'));
+        $this->conn->executeQuery(file_get_contents(__DIR__ . '/drop_table.sql'));
+        $this->conn->executeQuery(file_get_contents(__DIR__ . '/create_table.sql'));
 
         Type::addType('tstzrange', TsTzRangeType::class);
         $this->conn->getDatabasePlatform()->registerDoctrineTypeMapping('tstzrange', 'tstzrange');
-
     }
 
     public function test_writing(): void

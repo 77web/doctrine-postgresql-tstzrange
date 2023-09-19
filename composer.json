@@ -3,7 +3,8 @@
     "description": "Doctrine Type for PostgreSQL's tstzrange",
     "type": "library",
     "require-dev": {
-        "phpunit/phpunit": "^10.3"
+        "phpunit/phpunit": "^10.3",
+        "symplify/easy-coding-standard": "^12.0"
     },
     "license": "MIT",
     "autoload": {
