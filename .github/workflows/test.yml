@@ -1,0 +1,29 @@
+name: test
+
+on:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: prepare
+        run: >
+          composer install
+          docker compose up -d
+
+      - name: cs
+        run: >
+          vendor/bin/ecs
+
+      - name: phpstan
+        run: >
+          vendor/bin/phpstan
+
+      - name: test
+        run: >
+          vendor/bin/phpunit
