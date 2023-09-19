@@ -29,7 +29,7 @@ class TsTzRangeType extends Type
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
         if (!preg_match('/(\[|\()(.*)\,(.*)(\]|\))/', $value, $matches)) {
-            throw new \RuntimeException('unexpected value from DB: '.$value);
+            throw new \RuntimeException('unexpected value from DB: ' . $value);
         }
         $startParenthesis = $matches[1];
         $startsAtString = trim($matches[2], '"');
