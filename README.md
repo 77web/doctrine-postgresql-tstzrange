@@ -14,7 +14,7 @@ doctrine:
     dbal:
         types:
             tstzrange:
-                class: Linkage\DoctrinePostgreSql\TsTzRangeType
+                class: Linkage\DoctrinePostgreSqlTsTzRange\TsTzRangeType
 ```
 
 ```php
