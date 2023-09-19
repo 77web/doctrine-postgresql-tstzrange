@@ -28,6 +28,9 @@ class TsTzRangeType extends Type
      */
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
+        if (!is_string($value)) {
+            throw new \RuntimeException('tstzrange expects only string. unexpected value from DB: ' . $value);
+        }
         if (!preg_match('/(\[|\()(.*)\,(.*)(\]|\))/', $value, $matches)) {
             throw new \RuntimeException('unexpected value from DB: ' . $value);
         }
