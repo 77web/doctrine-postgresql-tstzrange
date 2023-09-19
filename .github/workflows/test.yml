@@ -18,7 +18,9 @@ jobs:
 
       - name: prepare
         run: >
-          composer install && \
+          composer install
+      - name: run postgresql server
+        run: >  
           docker compose up -d
 
       - name: cs
