@@ -1,0 +1,36 @@
+name: test
+
+on:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: prepare
+        run: >
+          composer install
+      - name: run postgresql server
+        run: >  
+          docker compose up -d
+
+      - name: cs
+        run: >
+          vendor/bin/ecs
+
+      - name: phpstan
+        run: >
+          vendor/bin/phpstan
+
+      - name: test
+        run: >
+          vendor/bin/phpunit
