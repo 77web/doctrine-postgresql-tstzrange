@@ -13,7 +13,7 @@ jobs:
 
       - name: prepare
         run: >
-          composer install
+          composer install && \
           docker compose up -d
 
       - name: cs
