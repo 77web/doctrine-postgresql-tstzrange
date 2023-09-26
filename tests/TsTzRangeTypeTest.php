@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Linkage\DoctrinePostgreSqlTsTzRange\Tests;
 
+use Doctrine\DBAL\Platforms\MySQLPlatform;
 use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use Linkage\DoctrinePostgreSqlTsTzRange\Period;
 use Linkage\DoctrinePostgreSqlTsTzRange\TsTzRangeType;
@@ -11,6 +12,26 @@ use PHPUnit\Framework\TestCase;
 
 class TsTzRangeTypeTest extends TestCase
 {
+    public function testGetSQLDeclaration(): void
+    {
+        $platformMock = $this->createMock(PostgreSQLPlatform::class);
+        $SUT = new TsTzRangeType();
+        $column = [];
+        $actual = $SUT->getSQLDeclaration($column, $platformMock);
+        $this->assertEquals('tstzrange', $actual);
+    }
+
+    public function testGetSQLDeclarationWithNotPostgres(): void
+    {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage("TsTzRangeType only supports postgresql.");
+
+        $platformMock = $this->createMock(MySQLPlatform::class);
+        $SUT = new TsTzRangeType();
+        $column = [];
+        $SUT->getSQLDeclaration($column, $platformMock);
+    }
+
     public function testConvertToPHPValue(): void
     {
         $platformMock = $this->createMock(PostgreSQLPlatform::class);

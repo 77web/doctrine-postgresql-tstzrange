@@ -15,7 +15,7 @@ class TsTzRangeType extends Type
      */
     public function getSQLDeclaration(array $column, AbstractPlatform $platform)
     {
-        if ($platform instanceof PostgreSQLPlatform) {
+        if (!$platform instanceof PostgreSQLPlatform) {
             throw new \LogicException('TsTzRangeType only supports postgresql.');
         }
 
