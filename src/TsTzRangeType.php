@@ -34,17 +34,8 @@ class TsTzRangeType extends Type
         if (!preg_match('/(\[|\()(.*)\,(.*)(\]|\))/', $value, $matches)) {
             throw new \RuntimeException('unexpected value from DB: ' . $value);
         }
-        $startParenthesis = $matches[1];
-        $startsAtString = trim($matches[2], '"');
-        $endsAtString = trim($matches[3], '"');
-        $endParenthesis = $matches[4];
 
-        $startsAt = $startsAtString === '' ? null : new \DateTimeImmutable($startsAtString);
-        $endsAt = $endsAtString === '' ? null : new \DateTimeImmutable($endsAtString);
-        $startInclusive = $startParenthesis === '[';
-        $endInclusive = $endParenthesis === ']';
-
-        return new Period($startsAt, $endsAt, $startInclusive, $endInclusive);
+        return (new PeriodFactory())->createFromString($value);
     }
 
     /**

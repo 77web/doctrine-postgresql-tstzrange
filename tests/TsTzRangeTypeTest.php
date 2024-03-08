@@ -37,43 +37,40 @@ class TsTzRangeTypeTest extends TestCase
         $platformMock = $this->createMock(PostgreSQLPlatform::class);
         $SUT = new TsTzRangeType();
 
-        // both inclusive
-        $actual1 = $SUT->convertToPHPValue('["2023-01-01 00:00:00+09","2023-01-31 23:59:59+09"]', $platformMock);
-        $this->assertTrue($actual1 instanceof Period);
-        $this->assertTrue($actual1->startsAtInclusive);
-        $this->assertTrue($actual1->endsAtInclusive);
-        $this->assertEquals('2023-01-01 00:00:00', $actual1->startsAt->format('Y-m-d H:i:s'));
-        $this->assertEquals('+09:00', $actual1->startsAt->getTimezone()->getName());
-        $this->assertEquals('2023-01-31 23:59:59', $actual1->endsAt->format('Y-m-d H:i:s'));
-        $this->assertEquals('+09:00', $actual1->endsAt->getTimezone()->getName());
+        $value = '["2023-01-01 00:00:00+09","2023-01-31 23:59:59+09"]';
+        $actual = $SUT->convertToPHPValue($value, $platformMock);
+        $this->assertEquals(
+            new Period(
+                startsAt: new \DateTimeImmutable('2023-01-01 00:00:00+09'),
+                endsAt: new \DateTimeImmutable('2023-01-31 23:59:59+09'),
+                startsAtInclusive: true,
+                endsAtInclusive: true
+            ),
+            $actual
+        );
+    }
 
-        // both exclusive
-        $actual2 = $SUT->convertToPHPValue('("2023-01-01 00:00:00+09","2023-01-31 23:59:59+09")', $platformMock);
-        $this->assertTrue($actual2 instanceof Period);
-        $this->assertFalse($actual2->startsAtInclusive);
-        $this->assertFalse($actual2->endsAtInclusive);
+    public function testConvertToPHPValueWithNotString(): void
+    {
+        $this->expectException(\RuntimeException::class);
 
-        // startsAt inclusive, endsAt exclusive
-        $actual3 = $SUT->convertToPHPValue('["2023-01-01 00:00:00+09","2023-01-31 23:59:59+09")', $platformMock);
-        $this->assertTrue($actual3 instanceof Period);
-        $this->assertTrue($actual3->startsAtInclusive);
-        $this->assertFalse($actual3->endsAtInclusive);
+        $platformMock = $this->createMock(PostgreSQLPlatform::class);
+        $SUT = new TsTzRangeType();
 
-        // null startsAt
-        $actual4 = $SUT->convertToPHPValue('[,"2023-01-31 23:59:59+09")', $platformMock);
-        $this->assertTrue($actual4 instanceof Period);
-        $this->assertTrue($actual4->startsAtInclusive);
-        $this->assertFalse($actual4->endsAtInclusive);
-        $this->assertNull($actual4->startsAt);
-        $this->assertNotNull($actual4->endsAt);
+        $notString = null;
+        $SUT->convertToPHPValue($notString, $platformMock);
+    }
 
-        // null startsAt
-        $actual5 = $SUT->convertToPHPValue('["2023-01-01 00:00:00+09",)', $platformMock);
-        $this->assertTrue($actual5 instanceof Period);
-        $this->assertTrue($actual5->startsAtInclusive);
-        $this->assertFalse($actual5->endsAtInclusive);
-        $this->assertNotNull($actual5->startsAt);
-        $this->assertNull($actual5->endsAt);
+    public function testConvertToPHPValueWithInvalidString(): void
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessageMatches('/^unexpected value from DB/');
+
+        $platformMock = $this->createMock(PostgreSQLPlatform::class);
+        $SUT = new TsTzRangeType();
+
+        $invalidString = 'abc';
+        $SUT->convertToPHPValue($invalidString, $platformMock);
     }
 
     public function testConvertToDatabaseValue(): void
