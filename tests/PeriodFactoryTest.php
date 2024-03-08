@@ -39,7 +39,7 @@ class PeriodFactoryTest extends TestCase
         $this->assertNull($actual4->startsAt);
         $this->assertNotNull($actual4->endsAt);
 
-        // null startsAt
+        // null endsAt
         $actual5 = $SUT->createFromString('["2023-01-01 00:00:00+09",)');
         $this->assertTrue($actual5->startsAtInclusive);
         $this->assertFalse($actual5->endsAtInclusive);
