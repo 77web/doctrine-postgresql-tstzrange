@@ -15,6 +15,11 @@ class TsTzRangeUsageTest extends TestCase
 {
     private Connection $conn;
 
+    public static function setUpBeforeClass(): void
+    {
+        Type::addType('tstzrange', TsTzRangeType::class);
+    }
+
     protected function setUp(): void
     {
         $connectionParams = [
@@ -28,7 +33,6 @@ class TsTzRangeUsageTest extends TestCase
         $this->conn->executeQuery(file_get_contents(__DIR__ . '/drop_table.sql'));
         $this->conn->executeQuery(file_get_contents(__DIR__ . '/create_table.sql'));
 
-        Type::addType('tstzrange', TsTzRangeType::class);
         $this->conn->getDatabasePlatform()->registerDoctrineTypeMapping('tstzrange', 'tstzrange');
     }
 
