@@ -15,6 +15,11 @@ class TsTzRangeUsageTest extends TestCase
 {
     private Connection $conn;
 
+    public static function setUpBeforeClass(): void
+    {
+        Type::addType('tstzrange', TsTzRangeType::class);
+    }
+
     protected function setUp(): void
     {
         $connectionParams = [
@@ -28,7 +33,6 @@ class TsTzRangeUsageTest extends TestCase
         $this->conn->executeQuery(file_get_contents(__DIR__ . '/drop_table.sql'));
         $this->conn->executeQuery(file_get_contents(__DIR__ . '/create_table.sql'));
 
-        Type::addType('tstzrange', TsTzRangeType::class);
         $this->conn->getDatabasePlatform()->registerDoctrineTypeMapping('tstzrange', 'tstzrange');
     }
 
@@ -49,5 +53,24 @@ class TsTzRangeUsageTest extends TestCase
 
         $actual = $this->conn->fetchAssociative('select * from reservation');
         $this->assertEquals('["2023-10-01 00:00:00+09","2023-10-01 01:00:00+09")', $actual['period'], 'Period object has been converted into pgsql\'s tstzrange expression and saved successfully.');
+    }
+
+    public function test_period_upper_null_value(): void
+    {
+        $qb = $this->conn->createQueryBuilder();
+        $qb->insert('reservation')
+            ->setValue('id', '?')
+            ->setValue('name', '?')
+            ->setValue('period', '?')
+            ->setParameter(0, 2)
+            ->setParameter(1, 'test2')
+            ->setParameter(2, new Period(
+                new \DateTimeImmutable('2023-10-01 00:00:00', new \DateTimeZone('Asia/Tokyo')),
+                null,
+            ), 'tstzrange')
+            ->executeQuery();
+
+        $actual = $this->conn->fetchAssociative('select * from reservation where id = 2');
+        $this->assertEquals('["2023-10-01 00:00:00+09",)', $actual['period'], 'Period object has been converted into pgsql\'s tstzrange expression in cases where the upper limit is null');
     }
 }
